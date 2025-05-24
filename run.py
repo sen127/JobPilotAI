@@ -1,33 +1,19 @@
-import sys
-import os
-from datetime import datetime
-from backend.llm_writer import generate_cover_letter
+import subprocess
 
-if len(sys.argv) < 4:
-    print("Usage: python run.py <job_title> <company_name> <job_description>")
-    sys.exit(1)
+print("🔄 Starting full job application pipeline...")
 
-job_title = sys.argv[1]
-company_name = sys.argv[2]
-job_description = sys.argv[3]
+# Step 1: Scrape LinkedIn jobs
+print("\n🔍 Running scraper...")
+scrape_result = subprocess.run(["python", "scrape_linkedin_jobs.py"])
+if scrape_result.returncode != 0:
+    print("❌ Scraper failed. Exiting.")
+    exit(1)
 
-# Replace this with your base background or load from a file
-user_background = "MBA at McGill, ex-BMO Delivery Lead, built AI startup Aemete, taught business analysis, led $45M platform migration."
+# Step 2: Auto-apply to scraped jobs
+print("\n🚀 Running auto-apply script...")
+auto_apply_result = subprocess.run(["python", "auto_apply_jobs.py"])
+if auto_apply_result.returncode != 0:
+    print("❌ Auto-apply script failed. Please check logs.")
+    exit(1)
 
-letter = generate_cover_letter(job_title, company_name, job_description, user_background)
-
-# Add bot disclaimer
-letter += "\n\n—\nThis job was applied to by a custom AI job bot I built to showcase my engineering skills and automate high-quality applications."
-
-# Output
-print("\n=== Cover Letter ===\n")
-print(letter)
-
-# Save to file
-os.makedirs("data/cover_letters", exist_ok=True)
-timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-file_path = f"data/cover_letters/cover_letter_{timestamp}.txt"
-with open(file_path, "w") as f:
-    f.write(letter)
-
-print(f"\n✅ Saved to: {file_path}")
+print("\n✅ Job application process completed successfully.")
