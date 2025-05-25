@@ -2,12 +2,15 @@ import re
 import json
 from typing import Dict
 import openai
+import logging
 from backend.config import (
     AZURE_OPENAI_KEY,
     AZURE_OPENAI_ENDPOINT,
     AZURE_OPENAI_DEPLOYMENT_NAME,
     AZURE_OPENAI_API_VERSION
 )
+
+logging.basicConfig(level=logging.INFO)
 
 openai.api_type = "azure"
 openai.api_base = AZURE_OPENAI_ENDPOINT
@@ -55,5 +58,5 @@ Ensure it's valid JSON (no single quotes, no trailing commas).
         return metadata
 
     except Exception as e:
-        print(f"[ERROR] Failed to extract metadata: {e}")
+        logging.error(f"Failed to extract metadata: {e}")
         return {}

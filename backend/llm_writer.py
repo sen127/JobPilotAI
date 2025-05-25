@@ -7,6 +7,9 @@ from backend.config import (
     AZURE_OPENAI_API_VERSION
 )
 
+# This file handles only GPT-based rewriting of cover letters and resumes.
+# Formatting preservation (e.g., header/footer retention, .docx cloning) should be done outside, in the calling module.
+
 # --- Azure OpenAI Configuration ---
 openai.api_type = "azure"
 openai.api_base = AZURE_OPENAI_ENDPOINT
@@ -28,10 +31,12 @@ def load_prompt_template(role_category):
         return f.read()
 
 
-# --- Generate Cover Letter using GPT ---
+# --- Generate Cover Letter Body using GPT ---
 def generate_cover_letter(job_title, company_name, job_description, user_background, system_prompt):
     user_prompt = f"""
-Write a cover letter for the position of {job_title} at {company_name}.
+This job was applied using an AI bot I built to automate job applications and demonstrate my product thinking, engineering skills, and initiative.
+
+Write only the body paragraphs of a cover letter for the position of {job_title} at {company_name}.
 
 Here is the job description:
 \"\"\"
@@ -44,6 +49,8 @@ Here is the candidate’s background:
 \"\"\"
 
 The tone should match the template and company culture.
+Do NOT include header, greeting, closing, or signature.
+Return only the main content paragraphs.
 """
 
     try:
@@ -63,10 +70,13 @@ The tone should match the template and company culture.
         return None
 
 
-# --- Resume Sentence Rewriter (Preserves Formatting) ---
+# --- Resume Sentence Rewriter (Minimal Edits, Preserve Formatting Tags) ---
 def rewrite_resume_sentences(lines, job_metadata):
+    # Note for developers: This function expects minimal sentence-level edits only.
+    # It preserves formatting tags and structure as-is.
+    # Actual DOCX copy-pasting and formatting preservation is handled outside this function.
     prompt = f"""
-You are an AI assistant improving a resume **without changing its formatting**.
+You are an AI assistant improving a resume with minimal sentence-level edits.
 
 You will receive lines from a resume. Rewrite each line to better match this job:
 
@@ -74,10 +84,9 @@ Job Metadata:
 {job_metadata}
 
 Rules:
-- Keep formatting and structure as close as possible to the original
 - Make only minimal improvements or keyword substitutions
-- Match tone, skills, and language to the job
-- Do NOT summarize or rearrange content
+- Preserve all formatting tags and structure exactly as in the original lines
+- Do NOT summarize, rearrange, or remove content
 - Return one revised line per input line
 
 Respond with the improved lines in the same order, separated by new lines.
