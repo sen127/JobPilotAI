@@ -1,0 +1,74 @@
+# ⚠️ Core secrets
+.env
+.env.*
+firebase-service-account.json
+*.key
+*.pem
+*.crt
+
+# ✅ Example file placeholders (safe to keep)
+!.env.example
+!firebase-service-account.example.json
+
+# 🧠 Node.js / JavaScript projects
+node_modules/
+dist/
+build/
+.npm/
+.npm-debug.log*
+package-lock.json
+yarn.lock
+
+# 💅 Frameworks (React, Vite, Next.js, etc.)
+.next/
+out/
+.vite/
+.cache/
+coverage/
+
+# 🐍 Python (if you're using it for backend/AI)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.db
+venv/
+.env/
+*.egg-info/
+
+# 🔧 IDEs / Editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# 💻 OS/Filesystem stuff
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ⚙️ Logs
+logs/
+*.log
+
+# 📦 Output or temp files
+*.zip
+*.tar
+*.gz
+*.rar
+*.bak
+*.tmp
+*.swp
+
+# 📁 Git backup
+*.orig
+
+# 🔐 Secrets JSON
+*.secret.json
+*.credentials.json
+
+# ✅ Optional: Ignore debug/test configs
+debug.log
+test-results/
+coverage/
